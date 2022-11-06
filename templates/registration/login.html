@@ -14,7 +14,7 @@
                              Please try again.
                              </p>
                              {% else %}
-                                <h3 class="text-center font-weight-light my-4">Please, log in</h3>
+                                <h3 class="text-center font-weight-light my-4">Please, log in!</h3>
                              {% endif %}
                         </div>
                         <div class="card-body">
@@ -22,7 +22,7 @@
                                 {% csrf_token %}
                                 <div class="form-floating mb-3">
                                     {{ form.username|add_class:'form-control' }}
-                                    <label for="id_username">Username</label>
+                                    <label for="id_username">Username or email</label>
                                 </div>
                                 <div class="form-floating mb-3">
                                     {{ form.password|add_class:'form-control' }}
@@ -37,7 +37,7 @@
                             </form>
                         </div>
                         <div class="card-footer text-center py-3">
-                            <div class="small"><a href="register.html">Need an account? Sign up!</a></div>
+                            <div class="small"><a href="{% url 'register' %}">Need an account? Sign up!</a></div>
                         </div>
                     </div>
                 </div>
