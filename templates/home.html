@@ -10,6 +10,30 @@
             </ol>
 
             <div class="row d-flex justify-content-center align-items-center h-50">
+
+              <div class="col-xl-3 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="mb-4">More information:</h4>
+                        <p>Latitude: <strong>{{ default_weather_data.location.lat }}&deg</strong></p>
+                        <p>Longitude: <strong>{{ default_weather_data.location.lon }}&deg</strong></p>
+
+                        <p>Local time: <strong>{{ default_weather_data.location.localtime }}</strong></p>
+                        <p>Pressure: <strong>{{ default_weather_data.current.pressure_mb }} hPa</strong></p>
+                        <p>Wind speed: <strong>{{ default_weather_data.current.wind_kph }} km/h</strong></p>
+                        <p>Wind direction: <strong>{{ default_weather_data.current.wind_dir }}</strong></p>
+                        <p>Timezone: <strong>{{ default_weather_data.location.tz_id }}</strong></p>
+                        <p>Cloudiness: <strong>{{ default_weather_data.current.cloud }}%</strong></p>
+                        <p>Humidity: <strong>{{ default_weather_data.current.humidity }}%</strong></p>
+                        <p>Precipitation: <strong>{{ default_weather_data.current.precip_mm }} mm</strong></p>
+
+                        <div class="d-flex flex-row align-items-center">
+                              <p class="mb-0 me-4">Condition:</p>
+                              <img src="https:{{ default_weather_data.current.condition.icon }}"/>
+                        </div>
+                    </div>
+                </div>
+              </div>
                 <div class="col-xl-6 mb-4">
                     <div class="card bg-dark text-white">
                       <div class="bg-image" style="border-radius: 135px;">
@@ -49,29 +73,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 mb-4">
-                  <div class="card">
-                      <div class="card-body">
-                          <h4 class="mb-4">More information:</h4>
-                          <p>Latitude: <strong>{{ default_weather_data.location.lat }}&deg</strong></p>
-                          <p>Longitude: <strong>{{ default_weather_data.location.lon }}&deg</strong></p>
 
-                          <p>Local time: <strong>{{ default_weather_data.location.localtime }}</strong></p>
-                          <p>Pressure: <strong>{{ default_weather_data.current.pressure_mb }} hPa</strong></p>
-                          <p>Wind speed: <strong>{{ default_weather_data.current.wind_kph }} km/h</strong></p>
-                          <p>Wind direction: <strong>{{ default_weather_data.current.wind_dir }}</strong></p>
-                          <p>Timezone: <strong>{{ default_weather_data.location.tz_id }}</strong></p>
-                          <p>Cloudiness: <strong>{{ default_weather_data.current.cloud }}%</strong></p>
-                          <p>Humidity: <strong>{{ default_weather_data.current.humidity }}%</strong></p>
-                          <p>Precipitation: <strong>{{ default_weather_data.current.precip_mm }} mm</strong></p>
 
-                          <div class="d-flex flex-row align-items-center">
-                                <p class="mb-0 me-4">Condition:</p>
-                                <img src="https:{{ default_weather_data.current.condition.icon }}"/>
-                          </div>
-                      </div>
-                  </div>
-              </div>
 
             </div>
         </div>
