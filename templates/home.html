@@ -6,7 +6,7 @@
         <div class="container-fluid px-4">
             <h1 class="mt-4">Dashboard</h1>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active">Default location</li>
+                <li class="breadcrumb-item active">Default location - {{ default_location }}</li>
             </ol>
 
             <div class="row d-flex justify-content-center align-items-center h-50">
@@ -27,9 +27,9 @@
                 </div>
 
                 <div class="col-xl-4">
-                    <h3 class="mb-4 pb-2 fw-normal">Check the weather forecast</h3>
+                    <h3 class="mb-4 mr-2 pb-2 fw-normal">Check the weather forecast</h3>
 
-                    <div class="input-group rounded mb-3">
+                    <div class="input-group rounded mb-3 ml-2">
                       <input type="search" class="form-control rounded ms-3" placeholder="City" aria-label="Search"
                         aria-describedby="search-addon" />
                       <a href="#!" type="button">
