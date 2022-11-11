@@ -12,14 +12,14 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
-                    Weather forecast for two next days
+                    Historical weather data (past 5 days)
                 </div>
                 <div class="card-body">
                     <table id="datatablesSimple">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Position</th>
+                                <th>Time</th>
+                                <th>Temp. [&deg;C]</th>
                                 <th>Office</th>
                                 <th>Age</th>
                                 <th>Start date</th>
@@ -37,14 +37,16 @@
                             </tr>
                         </tfoot>
                         <tbody>
+                            {% for item in historical_weather_data.forecast.forecastday.0.hour %}
                             <tr>
-                                <td>Tiger Nixon</td>
-                                <td>System Architect</td>
+                                <td>{{ item.time }}</td>
+                                <td>{{ item.temp_c }} &deg;C</td>
                                 <td>Edinburgh</td>
                                 <td>61</td>
                                 <td>2011/04/25</td>
                                 <td>$320,800</td>
                             </tr>
+                        {% endfor %}
 
                         </tbody>
                     </table>

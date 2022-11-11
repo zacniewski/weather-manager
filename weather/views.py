@@ -60,12 +60,18 @@ def forecast_weather(request):
 @login_required
 def historical_weather(request):
     query = request.GET.get("weather_query")
-    historical_weather_api_url = f"http://api.weatherapi.com/v1/history.json"
+    historical_weather_api_url = f"https://api.weatherapi.com/v1/history.json"
     # dobrać się do 5 ostatnich dni i je zapisać w JSONie!!!!
-    historical_weather_api_url += f"?key={wak}&q={query}&dt=2022-11-06"
+    if query:
+        historical_weather_api_url += f"?key={wak}&q={query}&dt=2022-11-06"
+    else:
+        historical_weather_api_url += f"?key={wak}&q={default_location}&dt=2022-11-06"
     response_historical = requests.get(historical_weather_api_url)
     return render(
         request,
         "weather/historical-weather.html",
-        {"forecast_weather": response_historical.json(), "query": query},
+        {
+            "historical_weather_data": response_historical.json(),
+            "query": query
+        },
     )
