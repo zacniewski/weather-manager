@@ -18,32 +18,34 @@
                     <table id="datatablesSimple">
                         <thead>
                             <tr>
-                                <th>Date & time</th>
-                                <th>Condition</th>
-                                <th>Temp. [&deg;C]</th>
-                                <th>Humidity [%]</th>
-                                <th>Wind [km/h] (direction)</th>
-                                <th>Cloudiness [%]</th>
-                                <th>Pressure [mPa]</th>
-                                <th>Precipitation [mm]</th>
+                                <th class="text-center">Date & time</th>
+                                <th class="text-center">Condition</th>
+                                <th class="text-center">Temp. [&deg;C]</th>
+                                <th class="text-center">Humidity [%]</th>
+                                <th class="text-center">Wind [km/h] (direction)</th>
+                                <th class="text-center">Cloudiness [%]</th>
+                                <th class="text-center">Pressure [mPa]</th>
+                                <th class="text-center">Precipitation [mm]</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>Name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Age</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
+                                <th class="text-center">Date & time</th>
+                                <th class="text-center">Condition</th>
+                                <th class="text-center">Temp. [&deg;C]</th>
+                                <th class="text-center">Humidity [%]</th>
+                                <th class="text-center">Wind [km/h] (direction)</th>
+                                <th class="text-center">Cloudiness [%]</th>
+                                <th class="text-center">Pressure [mPa]</th>
+                                <th class="text-center">Precipitation [mm]</th>
                             </tr>
                         </tfoot>
                         <tbody>
                             {% for item in historical_weather_data.forecast.forecastday.0.hour %}
                             <tr>
-                                <td>{{ item.time }}</td>
-                                <td><img src="https:{{ item.condition.icon }}"/></td>
-                                <td>{{ item.temp_c }}</td>
+                                <td class="text-center">{{ item.time }}</td>
+                                <td class="text-center"><img src="https:{{ item.condition.icon }}"/></td>
+                                <td class="text-center">{{ item.temp_c }}</td>
                                 <td>
                                     <div class="row d-flex align-items-center">
                                       <div class="col col-lg-12">
@@ -60,9 +62,9 @@
                                       </div>
                                   </div>
                                 </td>
-                                <td>{{ item.wind_kph}} ({{ item.wind_dir }})</td>
+                                <td class="text-center">{{ item.wind_kph}} ({{ item.wind_dir }})</td>
                                 <td>
-                                      <div class="row d-flex align-items-center">
+                                      <div class="row d-flex align-items-center justify-content-center">
                                           <div class="col col-lg-8">
                                               <div class="progress progress-lg mb-0">
                                                   <div class="progress-bar progress-bar-striped bg-warning"
@@ -79,25 +81,8 @@
                                           </div>
                                       </div>
                                 </td>
-                                <td>{{ item.pressure_mb }}</td>
-                                <td>
-                                     <div class="row d-flex align-items-center">
-                                          <div class="col col-lg-8">
-                                              <div class="progress progress-lg mb-0" style="height: {{ item.precip_mm|add:'5'}}px;">
-                                                  <div class="progress-bar"
-                                                       role="progressbar"
-                                                       aria-valuenow="{{ item.precip_mm }}"
-                                                       aria-valuemin="0"
-                                                       aria-valuemax="100"
-                                                       style="width: 100%;">
-                                                  </div>
-                                              </div>
-                                          </div>
-                                          <div class="col col-lg-4">
-                                              <div class="small fw-bold">{{ item.precip_mm }}</div>
-                                          </div>
-                                      </div>
-                                </td>
+                                <td class="text-center">{{ item.pressure_mb }}</td>
+                                <td class="d-flex justify-content-center"><div class="circle">{{ item.precip_mm }}</div></td>
                             </tr>
                         {% endfor %}
 

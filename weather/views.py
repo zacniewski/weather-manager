@@ -1,3 +1,4 @@
+import datetime
 import requests
 
 from django.conf import settings as conf_settings
@@ -30,10 +31,7 @@ def current_weather(request):
     return render(
         request,
         "weather/current-weather.html",
-        {
-            "current_weather_data": response_current.json(),
-            "query": query
-        },
+        {"current_weather_data": response_current.json(), "query": query},
     )
 
 
@@ -44,7 +42,9 @@ def forecast_weather(request):
     if query:
         forecast_weather_api_url += f"?key={wak}&q={query}&days=2&aqi=no&alerts=no"
     else:
-        forecast_weather_api_url += f"?key={wak}&q={default_location}&days=2&aqi=no&alerts=no"
+        forecast_weather_api_url += (
+            f"?key={wak}&q={default_location}&days=2&aqi=no&alerts=no"
+        )
     response_forecast = requests.get(forecast_weather_api_url)
     return render(
         request,
@@ -60,18 +60,29 @@ def forecast_weather(request):
 @login_required
 def historical_weather(request):
     query = request.GET.get("weather_query")
-    historical_weather_api_url = f"https://api.weatherapi.com/v1/history.json"
-    # dobrać się do 5 ostatnich dni i je zapisać w JSONie!!!!
+    base_historical_weather_api_url = f"https://api.weatherapi.com/v1/history.json"
     if query:
-        historical_weather_api_url += f"?key={wak}&q={query}&dt=2022-11-08"
+        place = query
     else:
-        historical_weather_api_url += f"?key={wak}&q={default_location}&dt=2022-11-08"
-    response_historical = requests.get(historical_weather_api_url)
+        place = default_location
+
+    # storage for 5 days JSON data
+    all_5_days_data = {}
+    today = datetime.date.today()
+    for i in range(1, 6):
+        previous_day = today - datetime.timedelta(days=i)
+        formatted_previous_day = previous_day.strftime("%Y-%m-%d")
+        historical_weather_api_url = f"{base_historical_weather_api_url}?key={wak}&q={place}&dt={formatted_previous_day}"
+        response_historical = requests.get(historical_weather_api_url)
+        if not all_5_days_data:
+            all_5_days_data.update(response_historical.json())
+        else:
+            all_5_days_data["forecast"]["forecastday"][0]["hour"].extend(
+                response_historical.json()["forecast"]["forecastday"][0]["hour"]
+            )
+
     return render(
         request,
         "weather/historical-weather.html",
-        {
-            "historical_weather_data": response_historical.json(),
-            "query": query
-        },
+        {"historical_weather_data": all_5_days_data, "query": query},
     )

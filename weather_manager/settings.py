@@ -137,4 +137,4 @@ AUTHENTICATION_BACKENDS = ["account.backends.CustomUserModelBackend"]
 
 # Weather API
 WEATHER_API_KEY = config("WEATHER_API_KEY")
-DEFAULT_LOCATION = "Zielona Góra"
+DEFAULT_LOCATION = "Wejherowo"
