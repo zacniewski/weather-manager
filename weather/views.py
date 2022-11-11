@@ -84,5 +84,9 @@ def historical_weather(request):
     return render(
         request,
         "weather/historical-weather.html",
-        {"historical_weather_data": all_5_days_data, "query": query},
+        {
+            "historical_weather_data": all_5_days_data,
+            "query": query,
+            "default_location": default_location,
+        },
     )
