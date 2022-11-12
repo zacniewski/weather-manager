@@ -20,3 +20,4 @@ class WeatherData(models.Model):
     cloudiness = models.CharField(max_length=30)
     humidity = models.CharField(max_length=30)
     precipitation = models.CharField(max_length=30)
+    condition = models.CharField(max_length=100)
