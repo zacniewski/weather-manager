@@ -1,5 +1,9 @@
 import datetime
+import re
+from urllib.request import urlopen
+
 import requests
+import socket
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.decorators import login_required
@@ -12,13 +16,28 @@ default_location = conf_settings.DEFAULT_LOCATION
 def home_page_view(request):
     current_weather_api_url = f"https://api.weatherapi.com/v1/current.json"
     current_weather_api_url += f"?key={wak}&q={default_location}&aqi=no"
+
+    # looking for neighbouly locations
+    neighbour_locations = set()
+    search_api_url = f"https://api.weatherapi.com/v1/search.json"
+    search_api_url += f"?key={wak}&q={default_location}"
+    response_search = requests.get(search_api_url)
+    for item in response_search.json():
+        print(item["name"])
+        neighbour_locations.add(item["name"])
     response_current = requests.get(current_weather_api_url)
+
+    # looking for public IP address
+    public_ip = get_public_ip_address()
+
     return render(
         request,
         "home.html",
         {
             "default_weather_data": response_current.json(),
             "default_location": default_location,
+            "public_ip": public_ip,
+            "neighbour_locations": neighbour_locations,
         },
     )
 
@@ -28,6 +47,7 @@ def current_weather(request):
     current_weather_api_url = f"https://api.weatherapi.com/v1/current.json"
     current_weather_api_url += f"?key={wak}&q={query}&aqi=no"
     response_current = requests.get(current_weather_api_url)
+
     return render(
         request,
         "weather/current-weather.html",
@@ -90,3 +110,8 @@ def historical_weather(request):
             "default_location": default_location,
         },
     )
+
+
+def get_public_ip_address():
+    data = str(urlopen("http://checkip.dyndns.com/").read())
+    return re.compile(r"Address: (\d+\.\d+\.\d+\.\d+)").search(data).group(1)
