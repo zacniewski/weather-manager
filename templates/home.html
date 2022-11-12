@@ -6,7 +6,21 @@
         <div class="container-fluid px-4">
             <h1 class="mt-4">Dashboard</h1>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item active">Default location - {{ default_location }}</li>
+                <li class="breadcrumb-item active">
+                    Default location - <b>{{ default_location }}</b>
+                </li>
+            </ol>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item">
+                    {% if ip_suggested_locations %}
+                        Your IP suggests given location(s):
+                        {% for item in ip_suggested_locations %}
+                            <b>{{ item }} |</b>
+                        {% endfor %}
+                    {% else %}}
+                        No suggested locations for your IP !
+                    {% endif %}
+                </li>
             </ol>
 
             <div class="row d-flex justify-content-center align-items-center h-50">
@@ -17,7 +31,6 @@
                         <h4 class="mb-4">Weather information:</h4>
                         <p>Latitude: <strong>{{ default_weather_data.location.lat }}&deg</strong></p>
                         <p>Longitude: <strong>{{ default_weather_data.location.lon }}&deg</strong></p>
-
                         <p>Local time: <strong>{{ default_weather_data.location.localtime }}</strong></p>
                         <p>Pressure: <strong>{{ default_weather_data.current.pressure_mb }} hPa</strong></p>
                         <p>Wind speed: <strong>{{ default_weather_data.current.wind_kph }} km/h</strong></p>

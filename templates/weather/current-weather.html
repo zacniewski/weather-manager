@@ -10,9 +10,20 @@
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">Current location - {{ query }}</li>
             </ol>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item">
+                    {% if neighbour_locations %}
+                        You can also check nearby places like:
+                        {% for item in neighbour_locations %}
+                            <b>{{ item }} |</b>
+                        {% endfor %}
+                    {% else %}}
+                        No locations found in neighbourhood !
+                    {% endif %}
+                </li>
+            </ol>
 
             <div class="row d-flex justify-content-center align-items-center h-50">
-
               <div class="col-xl-3 mb-4">
                 <div class="card">
                     <div class="card-body">
@@ -82,9 +93,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </main>
