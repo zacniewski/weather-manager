@@ -7,7 +7,7 @@
             <h1 class="mt-4">Dashboard</h1>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">
-                    Default location - <b>{{ default_location }}</b>
+                    Chosen location - <b>{{ chosen_location }}</b>
                 </li>
             </ol>
             <ol class="breadcrumb mb-4">
@@ -55,7 +55,7 @@
                         <div class="mask" style="background-color: rgba(190, 216, 232, .5);"></div>
                       </div>
                       <div class="card-img-overlay text-dark">
-                        <h4 class="mb-0">{{ default_location }}, {{ default_weather_data.location.country }}</h4>
+                        <h4 class="mb-0">{{ chosen_location }}, {{ default_weather_data.location.country }}</h4>
                         <p class="display-2 my-3">{{ default_weather_data.current.temp_c }} °C</p>
                         <p class="mb-2">Feels Like: <strong>{{ default_weather_data.current.feelslike_c }} °C</strong></p>
                         <p class="mb-2">Condition: <strong>{{ default_weather_data.current.condition.text }}</strong></p>
