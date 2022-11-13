@@ -32,7 +32,7 @@
                             </a>
                             {% if request.user.is_authenticated %}
                                 <a class="nav-link" href="{% url 'favourite_location' %}">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    <div class="sb-nav-link-icon"><i class="fas fa-umbrella"></i></div>
                                     Favourite location
                                 </a>
                             {% endif%}
@@ -40,11 +40,11 @@
                             {% if not request.user.is_authenticated %}
                             <div class="sb-sidenav-menu-heading">Account</div>
                             <a class="nav-link" href="{% url 'register' %}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-moon"></i></div>
                                 Register
                             </a>
                             <a class="nav-link" href="{% url 'login' %}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-raindrops"></i></div>
                                 Log in
                             </a>
                             {% endif %}
@@ -52,16 +52,12 @@
                             {% if request.user.is_authenticated %}
                                 <div class="sb-sidenav-menu-heading">Weather data</div>
                                 <a class="nav-link" href="{% url 'historical_weather' %}">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                    <div class="sb-nav-link-icon"><i class="fas fa-snowflake"></i></div>
                                     History
                                 </a>
                                 <a class="nav-link" href="{% url 'forecast_weather' %}">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                    <div class="sb-nav-link-icon"><i class="fas fa-bolt-lightning"></i></div>
                                     Forecast
-                                </a>
-                                <a class="nav-link" href="charts.html">
-                                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                    Chart (bonus)
                                 </a>
                             {% endif%}
 

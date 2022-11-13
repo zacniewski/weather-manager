@@ -1,16 +1,16 @@
 import datetime
+import matplotlib.pyplot as plt
 import re
 import requests
 from urllib.request import urlopen
 
-
 from django.conf import settings as conf_settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+from django.templatetags.static import static
 
 from .forms import FavouriteLocationForm
 from .models import FavouriteLocation, WeatherData
-
 
 wak = conf_settings.WEATHER_API_KEY
 default_location = conf_settings.DEFAULT_LOCATION
@@ -66,27 +66,32 @@ def current_weather(request):
     # check if weather data are already in the database
     weather_data_from_database = WeatherData.objects.filter(location=query)
     if weather_data_from_database:
-        response_current = {
-            "location": {},
-            "current": {"condition": {}}
-        }
+        response_current = {"location": {}, "current": {"condition": {}}}
         dict_with_weather_data = list(weather_data_from_database.values())[0]
         print(dict_with_weather_data)
         response_current["location"]["name"] = dict_with_weather_data["location"]
         response_current["location"]["lat"] = dict_with_weather_data["latitude"]
         response_current["location"]["lon"] = dict_with_weather_data["longitude"]
         response_current["location"]["localtime"] = dict_with_weather_data["local_time"]
-        response_current["current"]["pressure_mb"] = dict_with_weather_data["pressure_mb"]
+        response_current["current"]["pressure_mb"] = dict_with_weather_data[
+            "pressure_mb"
+        ]
         response_current["current"]["wind_kph"] = dict_with_weather_data["wind_kph"]
         response_current["current"]["wind_dir"] = dict_with_weather_data["wind_dir"]
         response_current["location"]["tz_id"] = dict_with_weather_data["timezone"]
         response_current["current"]["cloud"] = dict_with_weather_data["cloudiness"]
         response_current["current"]["humidity"] = dict_with_weather_data["humidity"]
-        response_current["current"]["precip_mm"] = dict_with_weather_data["precipitation"]
-        response_current["current"]["condition"]["icon"] = dict_with_weather_data["condition_icon"]
+        response_current["current"]["precip_mm"] = dict_with_weather_data[
+            "precipitation"
+        ]
+        response_current["current"]["condition"]["icon"] = dict_with_weather_data[
+            "condition_icon"
+        ]
         response_current["location"]["country"] = dict_with_weather_data["country"]
         response_current["current"]["temp_c"] = dict_with_weather_data["temperature"]
-        response_current["current"]["feelslike_c"] = dict_with_weather_data["feels_like"]
+        response_current["current"]["feelslike_c"] = dict_with_weather_data[
+            "feels_like"
+        ]
         response_current["current"]["condition"] = dict_with_weather_data["condition"]
     else:
         response_current = requests.get(query_weather_api_url).json()
@@ -159,6 +164,22 @@ def historical_weather(request):
                     response_historical.json()["forecast"]["forecastday"][0]["hour"]
                 )
 
+    # plotting historical data
+    x = []
+    y = []
+    for item in all_5_days_data["forecast"]["forecastday"][0]["hour"]:
+        x.append(item["time"])
+        y.append(item["temp_c"])
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+    ax.plot(y, color='blue', label='Temperature')
+    ax.set_title(f'Data from {today - datetime.timedelta(days=5)} to {today - datetime.timedelta(days=1)}', fontsize=20)
+    ax.set_xlabel('Time samples', fontsize=16)
+    ax.set_ylabel('Temperature ($^\circ$C)', fontsize=16)
+    leg = ax.legend()
+    path_to_saved_plot = f"{conf_settings.STATICFILES_DIRS[0]}/plots/{request.user}-chart.png"
+    plt.savefig(path_to_saved_plot)
+
     return render(
         request,
         "weather/historical-weather.html",
@@ -170,6 +191,15 @@ def historical_weather(request):
     )
 
 
+def chart_historical_data(request):
+    path_to_saved_plot_in_static = static(f"plots/{request.user}-chart.png")
+    return render(request,
+                  "weather/chart-with-historical-data.html",
+                  {"path_to_saved_plot_in_static": path_to_saved_plot_in_static}
+                  )
+
+
+@login_required
 def favourite_location(request):
     if request.method == "POST":
         form = FavouriteLocationForm(request.POST)
@@ -205,7 +235,7 @@ def saving_single_weather_data(response_data):
         temperature=response_data["current"]["temp_c"],
         feels_like=response_data["current"]["feelslike_c"],
         condition=response_data["current"]["condition"]["text"],
-        created=datetime.datetime.now()
+        created=datetime.datetime.now(),
     )
     single_weather_data.save()
 

@@ -87,9 +87,10 @@
                                   <button class="btn btn-secondary" type="submit">Search </button>
                               </div>
                             </form>
-                            <p class="mb-2">Get much more info after <a href="{% url 'login' %}">logging in</a> !</p>
-                            <p class="mb-2">If you don't have an account, please <a href="{% url 'register' %}">sign up</a> !</p>
-
+                            {% if not request.user.is_authenticated %}
+                                <p class="mb-2">Get much more info after <a href="{% url 'login' %}">logging in</a> !</p>
+                                <p class="mb-2">If you don't have an account, please <a href="{% url 'register' %}">sign up</a> !</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

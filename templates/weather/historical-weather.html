@@ -28,16 +28,16 @@
                             <button class="btn btn-secondary" type="submit">Search </button>
                           </div>
                       </span>
-
               </div>
-
             </form>
 
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
-                    Historical weather data (past 5 days)
+                    Historical weather data (past 5 days) -
+                    <b><a href="{% url 'chart_historical_data' %}" class="link-primary">look at the chart!</a></b>
                 </div>
+
                 <div class="card-body">
                     <table id="datatablesSimple">
                         <thead>

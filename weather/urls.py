@@ -5,6 +5,7 @@ from .views import (
     forecast_weather,
     historical_weather,
     favourite_location,
+    chart_historical_data
 )
 
 
@@ -14,4 +15,6 @@ urlpatterns = [
     path("forecast-weather/", forecast_weather, name="forecast_weather"),
     path("historical-weather/", historical_weather, name="historical_weather"),
     path("favourite-location/", favourite_location, name="favourite_location"),
+    path("chart-of-historical-data/", chart_historical_data, name="chart_historical_data"),
+
 ]
