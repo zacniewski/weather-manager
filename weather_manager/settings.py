@@ -13,7 +13,6 @@ import django_on_heroku
 from decouple import config
 from pathlib import Path
 
-django_on_heroku.settings(locals())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -143,3 +142,7 @@ AUTHENTICATION_BACKENDS = ["account.backends.CustomUserModelBackend"]
 # Weather API
 WEATHER_API_KEY = config("WEATHER_API_KEY")
 DEFAULT_LOCATION = "Zielona Gora"
+
+# Heroku
+django_on_heroku.settings(locals())
+
