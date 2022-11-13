@@ -32,6 +32,7 @@ def home_page_view(request):
     default_weather_api_url = (
         f"{current_weather_api_url}?key={wak}&q={chosen_location}&aqi=no"
     )
+
     response_current = requests.get(default_weather_api_url).json()
 
     # saving results to the database
@@ -61,11 +62,37 @@ def home_page_view(request):
 def current_weather(request):
     query = request.GET.get("weather_query")
     query_weather_api_url = f"{current_weather_api_url}?key={wak}&q={query}&aqi=no"
-    response_current = requests.get(query_weather_api_url).json()
 
-    # saving results to the database
-    if response_current:
-        saving_single_weather_data(response_current)
+    # check if weather data are already in the database
+    weather_data_from_database = WeatherData.objects.filter(location=query)
+    if weather_data_from_database:
+        response_current = {
+            "location": {},
+            "current": {"condition": {}}
+        }
+        dict_with_weather_data = list(weather_data_from_database.values())[0]
+        print(dict_with_weather_data)
+        response_current["location"]["name"] = dict_with_weather_data["location"]
+        response_current["location"]["lat"] = dict_with_weather_data["latitude"]
+        response_current["location"]["lon"] = dict_with_weather_data["longitude"]
+        response_current["location"]["localtime"] = dict_with_weather_data["local_time"]
+        response_current["current"]["pressure_mb"] = dict_with_weather_data["pressure_mb"]
+        response_current["current"]["wind_kph"] = dict_with_weather_data["wind_kph"]
+        response_current["current"]["wind_dir"] = dict_with_weather_data["wind_dir"]
+        response_current["location"]["tz_id"] = dict_with_weather_data["timezone"]
+        response_current["current"]["cloud"] = dict_with_weather_data["cloudiness"]
+        response_current["current"]["humidity"] = dict_with_weather_data["humidity"]
+        response_current["current"]["precip_mm"] = dict_with_weather_data["precipitation"]
+        response_current["current"]["condition"]["icon"] = dict_with_weather_data["condition_icon"]
+        response_current["location"]["country"] = dict_with_weather_data["country"]
+        response_current["current"]["temp_c"] = dict_with_weather_data["temperature"]
+        response_current["current"]["feelslike_c"] = dict_with_weather_data["feels_like"]
+        response_current["current"]["condition"] = dict_with_weather_data["condition"]
+    else:
+        response_current = requests.get(query_weather_api_url).json()
+        # saving results to the database
+        if response_current:
+            saving_single_weather_data(response_current)
 
     # looking for neighbourly locations
     neighbour_locations = set()
@@ -173,8 +200,12 @@ def saving_single_weather_data(response_data):
         cloudiness=response_data["current"]["cloud"],
         humidity=response_data["current"]["humidity"],
         precipitation=response_data["current"]["precip_mm"],
-        condition=f"https:{response_data['current']['condition']['icon']}",
-        created=datetime.datetime.now(),
+        condition_icon=f"https:{response_data['current']['condition']['icon']}",
+        country=response_data["location"]["country"],
+        temperature=response_data["current"]["temp_c"],
+        feels_like=response_data["current"]["feelslike_c"],
+        condition=response_data["current"]["condition"]["text"],
+        created=datetime.datetime.now()
     )
     single_weather_data.save()
 
