@@ -1,23 +1,42 @@
 import datetime
 import re
+import requests
 from urllib.request import urlopen
 
-import requests
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
+from .forms import FavouriteLocationForm
+from .models import FavouriteLocation, WeatherData
+
+
 wak = conf_settings.WEATHER_API_KEY
 default_location = conf_settings.DEFAULT_LOCATION
 current_weather_api_url = f"https://api.weatherapi.com/v1/current.json"
-
 search_api_url = f"https://api.weatherapi.com/v1/search.json"
 
 
 def home_page_view(request):
-    default_weather_api_url = f"{current_weather_api_url}?key={wak}&q={default_location}&aqi=no"
-    response_current = requests.get(default_weather_api_url)
+    # checking if user's favourite location exists in database
+    fav_loc = (
+        FavouriteLocation.objects.filter(owner=request.user)
+        .order_by("-created")
+        .first()
+    )
+    if fav_loc:
+        chosen_location = fav_loc
+    else:
+        chosen_location = default_location
+    default_weather_api_url = (
+        f"{current_weather_api_url}?key={wak}&q={chosen_location}&aqi=no"
+    )
+    response_current = requests.get(default_weather_api_url).json()
+
+    # saving results to the database
+    if response_current:
+        saving_single_weather_data(response_current)
 
     # looking for public IP address
     ip_suggested_locations = set()
@@ -31,10 +50,10 @@ def home_page_view(request):
         request,
         "home.html",
         {
-            "default_weather_data": response_current.json(),
-            "default_location": default_location,
+            "default_weather_data": response_current,
+            "chosen_location": chosen_location,
             "public_ip": public_ip,
-            "ip_suggested_locations": ip_suggested_locations
+            "ip_suggested_locations": ip_suggested_locations,
         },
     )
 
@@ -42,7 +61,11 @@ def home_page_view(request):
 def current_weather(request):
     query = request.GET.get("weather_query")
     query_weather_api_url = f"{current_weather_api_url}?key={wak}&q={query}&aqi=no"
-    response_current = requests.get(query_weather_api_url)
+    response_current = requests.get(query_weather_api_url).json()
+
+    # saving results to the database
+    if response_current:
+        saving_single_weather_data(response_current)
 
     # looking for neighbourly locations
     neighbour_locations = set()
@@ -55,7 +78,7 @@ def current_weather(request):
         request,
         "weather/current-weather.html",
         {
-            "current_weather_data": response_current.json(),
+            "current_weather_data": response_current,
             "query": query,
             "neighbour_locations": neighbour_locations,
         },
@@ -118,6 +141,42 @@ def historical_weather(request):
             "default_location": default_location,
         },
     )
+
+
+def favourite_location(request):
+    if request.method == "POST":
+        form = FavouriteLocationForm(request.POST)
+        if form.is_valid():
+            fav_location = form.save(commit=False)
+            fav_location.owner = request.user
+            fav_location.save()
+            return render(
+                request,
+                "weather/favourite-location-done.html",
+                {"fav_location": fav_location},
+            )
+    else:
+        form = FavouriteLocationForm()
+    return render(request, "weather/favourite-location.html", {"fav_loc_form": form})
+
+
+def saving_single_weather_data(response_data):
+    single_weather_data = WeatherData(
+        location=response_data["location"]["name"],
+        latitude=response_data["location"]["lat"],
+        longitude=response_data["location"]["lon"],
+        local_time=response_data["location"]["localtime"],
+        pressure_mb=response_data["current"]["pressure_mb"],
+        wind_kph=response_data["current"]["wind_kph"],
+        wind_dir=response_data["current"]["wind_dir"],
+        timezone=response_data["location"]["tz_id"],
+        cloudiness=response_data["current"]["cloud"],
+        humidity=response_data["current"]["humidity"],
+        precipitation=response_data["current"]["precip_mm"],
+        condition=f"https:{response_data['current']['condition']['icon']}",
+        created=datetime.datetime.now(),
+    )
+    single_weather_data.save()
 
 
 def get_public_ip_address():
