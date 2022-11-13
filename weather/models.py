@@ -10,7 +10,7 @@ class EventManager(models.Manager):
         return (
             super()
             .get_queryset()
-            .filter(created__gte=timezone.now() - timezone.timedelta(minutes=5))
+            .filter(created__gte=timezone.now() - timezone.timedelta(hours=3))
         )
 
 
