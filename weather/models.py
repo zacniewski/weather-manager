@@ -6,11 +6,15 @@ User = get_user_model()
 
 
 class EventManager(models.Manager):
+    """
+    "Hide" data that are older than 3 hours.
+    In the future these data could be removed with .delete() method for example using Celery.
+    """
     def get_queryset(self):
         return (
             super()
             .get_queryset()
-            .filter(created__gte=timezone.now() - timezone.timedelta(hours=3))
+            .filter(created__gte=timezone.now() - timezone.timedelta(minutes=3))
         )
 
 
@@ -35,7 +39,11 @@ class WeatherData(models.Model):
     cloudiness = models.CharField(max_length=30)
     humidity = models.CharField(max_length=30)
     precipitation = models.CharField(max_length=30)
-    condition = models.URLField(max_length=100)
+    condition_icon = models.URLField(max_length=100)
+    country = models.CharField(max_length=30)
+    temperature = models.CharField(max_length=10)
+    feels_like = models.CharField(max_length=10)
+    condition = models.CharField(max_length=30)
     created = models.DateTimeField(auto_now=True)
 
     objects = EventManager()
