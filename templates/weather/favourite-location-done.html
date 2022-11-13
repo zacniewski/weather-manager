@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Just added <u>{{ fav_location }}</u> !</h1>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <p>
+                     Your new favourite location has been successfully added.
+                     You can <a href="{% url 'logout' %}">log out</a> or go to the <a href="{% url 'home_page_view' %}">home page</a>!
+                     </p>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock content %}
