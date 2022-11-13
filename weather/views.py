@@ -68,7 +68,6 @@ def current_weather(request):
     if weather_data_from_database:
         response_current = {"location": {}, "current": {"condition": {}}}
         dict_with_weather_data = list(weather_data_from_database.values())[0]
-        print(dict_with_weather_data)
         response_current["location"]["name"] = dict_with_weather_data["location"]
         response_current["location"]["lat"] = dict_with_weather_data["latitude"]
         response_current["location"]["lon"] = dict_with_weather_data["longitude"]

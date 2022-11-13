@@ -140,7 +140,7 @@ AUTH_USER_MODEL = "account.User"
 AUTHENTICATION_BACKENDS = ["account.backends.CustomUserModelBackend"]
 
 # Weather API
-WEATHER_API_KEY = config("WEATHER_API_KEY")
+WEATHER_API_KEY = "98c41912d2e5469d90c94746221111"
 DEFAULT_LOCATION = "Zielona Gora"
 
 # Heroku
