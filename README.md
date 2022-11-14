@@ -46,7 +46,7 @@ $ # Access the web app in browser: http://127.0.0.1:8000/
 
 
 ```bash
-$ # Build an image the code
+$ # Build an image
 $ # To sudo or not to sudo - it depends on your Docker settings and permissions
 $ sudo docker build .
 $ sudo docker-compose up -d 
