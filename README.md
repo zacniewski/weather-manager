@@ -52,6 +52,9 @@ $ sudo docker build .
 $ sudo docker-compose up -d 
 
 $ # Access the web app in browser: http://0.0.0.0:8000/
+
+$ # To stop the container
+$ sudo docker-compose down
 ```
 
 ## Features
