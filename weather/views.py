@@ -20,6 +20,7 @@ search_api_url = f"https://api.weatherapi.com/v1/search.json"
 
 def home_page_view(request):
     # checking if user's favourite location exists in database
+    chosen_location = default_location
     if request.user.is_authenticated:
         fav_loc = (
             FavouriteLocation.objects.filter(owner=request.user)
