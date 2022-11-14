@@ -1,7 +1,7 @@
 # Weather Manager by Artur :smiley:
 Web application for managing weather data from WeatherAPI
 
-## How to use it
+## How to use it (virtualenv and Docker)
 
 ```bash
 $ # Get the code
@@ -41,9 +41,14 @@ $ # python manage.py runserver 0.0.0.0:<your_port>
 $ # Access the web app in browser: http://127.0.0.1:8000/
 ```
 
-> Note: To get more features (see information below), please access the registration page and create a user
-> You can use username or an email
-<br />
+```bash
+$ # Build an image the code
+$ # To sudo or not to sudo - it depends on your Docker settings and permissions
+$ sudo docker build .
+$ sudo docker-compose up -d 
+
+$ # Access the web app in browser: http://0.0.0.0:8000/
+```
 
 ## Features
 1. For non-logged users
