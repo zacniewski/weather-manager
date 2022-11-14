@@ -1,6 +1,63 @@
 # Weather Manager by Artur :smiley:
 Web application for managing weather data from WeatherAPI
 
+## How to use it
+
+```bash
+$ # Get the code
+$ git clone https://github.com/zacniewski/weather-manager.git
+$ cd weather-manager
+
+$ # Virtualenv modules installation (Unix based systems)
+$ virtualenv my_env (or python -m venv my_env)
+$ source my_env/bin/activate
+
+# Virtualenv modules installation (Windows system)
+python -m venv <venv-name>
+# To activate
+#C:\Users\..\<venv-name>
+.\Scripts\activate.bat
+
+$ # Virtualenv modules installation (Windows based systems)
+$ # virtualenv env
+$ # .\env\Scripts\activate
+
+$ # Install modules - SQLite Storage
+$ pip install -r requirements.txt
+$
+$ # Create tables
+$ python manage.py makemigrations
+$ python manage.py migrate
+$
+$ # Create app superuser to get to the admin panel
+$ python manage.py createsuperuser
+$
+$ # Start the application (development mode)
+$ python manage.py runserver # default port 8000
+$
+$ # Start the app - custom port
+$ # python manage.py runserver 0.0.0.0:<your_port>
+
+$ # Access the web app in browser: http://127.0.0.1:8000/
+```
+
+> Note: To get more features (see information below), please access the registration page and create a user
+> You can use username or an email
+<br />
+
+## Features
+1. For non-logged users
+  - getting information about the current weather in every place in the world,  
+  - suggesting the place of your location (based on your public IP address),  
+  - when searching for the Polish locations, please use "Zielona Gora" instead of "Zielona Góra" or "Chelmno" instead of "Chełmno",
+
+2. For registered users
+  - all the above,  
+  - getting suggestions about the nearby places (based on searched location),  
+  - forecast weather for the given location (2 days),  
+  - historical weather for the given location (5 past days) + chart of the temperature,  
+  - possibility of saving 'favourite' places, these places would be suggested during next search.  
+
 
 ### Example of a response from the [Weather API](https://www.weatherapi.com/api-explorer.aspx)
 ```json
