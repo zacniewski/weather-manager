@@ -1,7 +1,8 @@
 # Weather Manager by Artur :smiley:
 Web application for managing weather data from WeatherAPI
 
-## How to use it (virtualenv and Docker)
+## How to use it 
+  1. Virtualenv version  
 
 ```bash
 $ # Get the code
@@ -39,7 +40,10 @@ $ # Start the app - custom port
 $ # python manage.py runserver 0.0.0.0:<your_port>
 
 $ # Access the web app in browser: http://127.0.0.1:8000/
-```
+```  
+
+  2. Docker version  
+
 
 ```bash
 $ # Build an image the code
