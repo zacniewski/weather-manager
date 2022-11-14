@@ -127,12 +127,12 @@
        <div class="col-12 col-xxl-12 mb-4">
             <div class="card border-0 shadow">
                 <div class="card-header border-bottom d-flex flex-column align-items-center justify-content-center">
-                    <h2 class="fw-bold mb-4 mt-6">Error: {{ current_weather_data.error.message }}</h2>
+                    <h2 class="fw-bold mb-4 mt-6">Error: {{ historical_weather_data.error.message }}</h2>
                     <span style='font-size:3rem;'>&#9940;</span>
                 </div>
                 <div class="d-flex align-items-center justify-content-center border-bottom pb-3">
                     <div class="d-flex align-items-center pt-3">
-                        <h3>Try <a href="{% url 'home_page_view' %}">again</a> with different place!</h3>
+                        <h3>Try <a href="{% url 'historical_weather' %}">again</a> with different place!</h3>
 
                    </div>
                 </div>

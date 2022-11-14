@@ -96,8 +96,9 @@ def current_weather(request):
         response_current["current"]["condition"] = dict_with_weather_data["condition"]
     else:
         response_current = requests.get(query_weather_api_url).json()
+        print(f"{response_current=}")
         # saving results to the database
-        if response_current:
+        if response_current and not response_current['error']:
             saving_single_weather_data(response_current)
 
     # looking for neighbourly locations
@@ -157,7 +158,7 @@ def historical_weather(request):
         formatted_previous_day = previous_day.strftime("%Y-%m-%d")
         historical_weather_api_url = f"{base_historical_weather_api_url}?key={wak}&q={place}&dt={formatted_previous_day}"
         response_historical = requests.get(historical_weather_api_url)
-        if response_historical:
+        if response_historical.status_code == "200":
             if not all_5_days_data:
                 all_5_days_data.update(response_historical.json())
             else:
@@ -165,21 +166,23 @@ def historical_weather(request):
                     response_historical.json()["forecast"]["forecastday"][0]["hour"]
                 )
 
-    # plotting historical data
-    x = []
-    y = []
-    for item in all_5_days_data["forecast"]["forecastday"][0]["hour"]:
-        x.append(item["time"])
-        y.append(item["temp_c"])
+            # plotting historical data
+            x = []
+            y = []
+            for item in all_5_days_data["forecast"]["forecastday"][0]["hour"]:
+                x.append(item["time"])
+                y.append(item["temp_c"])
 
-    fig, ax = plt.subplots(figsize=(12, 6))
-    ax.plot(y, color='blue', label='Temperature')
-    ax.set_title(f'Data from {today - datetime.timedelta(days=5)} to {today - datetime.timedelta(days=1)}', fontsize=20)
-    ax.set_xlabel('Time samples', fontsize=16)
-    ax.set_ylabel('Temperature ($^\circ$C)', fontsize=16)
-    leg = ax.legend()
-    path_to_saved_plot = f"{conf_settings.STATICFILES_DIRS[0]}/plots/{request.user}-chart.png"
-    plt.savefig(path_to_saved_plot)
+            fig, ax = plt.subplots(figsize=(12, 6))
+            ax.plot(y, color='blue', label='Temperature')
+            ax.set_title(f'Data from {today - datetime.timedelta(days=5)} to {today - datetime.timedelta(days=1)}', fontsize=20)
+            ax.set_xlabel('Time samples', fontsize=16)
+            ax.set_ylabel('Temperature ($^\circ$C)', fontsize=16)
+            leg = ax.legend()
+            path_to_saved_plot = f"{conf_settings.STATICFILES_DIRS[0]}/plots/{request.user}-chart.png"
+            plt.savefig(path_to_saved_plot)
+        else:
+            all_5_days_data.update(response_historical.json())
 
     return render(
         request,
