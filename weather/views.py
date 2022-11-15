@@ -174,7 +174,8 @@ def historical_weather(request):
 
             fig, ax = plt.subplots(figsize=(12, 6))
             ax.plot(y, color='blue', label='Temperature')
-            ax.set_title(f'Data from {today - datetime.timedelta(days=5)} to {today - datetime.timedelta(days=1)}', fontsize=20)
+            ax.set_title(f'Data from {today - datetime.timedelta(days=5)} to {today - datetime.timedelta(days=1)}',
+                         fontsize=20)
             ax.set_xlabel('Time samples', fontsize=16)
             ax.set_ylabel('Temperature ($^\circ$C)', fontsize=16)
             leg = ax.legend()
@@ -243,6 +244,10 @@ def saving_single_weather_data(response_data):
     single_weather_data.save()
 
 
-def get_public_ip_address():
-    data = str(urlopen("http://checkip.dyndns.com/").read())
-    return re.compile(r"Address: (\d+\.\d+\.\d+\.\d+)").search(data).group(1)
+def get_public_ip_address(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
