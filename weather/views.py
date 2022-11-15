@@ -43,7 +43,7 @@ def home_page_view(request):
 
     # looking for public IP address
     ip_suggested_locations = set()
-    public_ip = get_public_ip_address()
+    public_ip = get_public_ip_address(request)
     suggested_ip_locations_api_url = f"{search_api_url}?key={wak}&q={public_ip}"
     response_ip_suggested_location = requests.get(suggested_ip_locations_api_url)
     for item in response_ip_suggested_location.json():
