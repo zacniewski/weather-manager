@@ -95,11 +95,10 @@ def current_weather(request):
         ]
         response_current["current"]["condition"] = dict_with_weather_data["condition"]
     else:
-        response_current = requests.get(query_weather_api_url).json()
-        print(f"{response_current=}")
+        response_current = requests.get(query_weather_api_url)
         # saving results to the database
-        if response_current and not response_current['error']:
-            saving_single_weather_data(response_current)
+        if response_current.status_code == "200":
+            saving_single_weather_data(response_current.json())
 
     # looking for neighbourly locations
     neighbour_locations = set()
@@ -112,7 +111,7 @@ def current_weather(request):
         request,
         "weather/current-weather.html",
         {
-            "current_weather_data": response_current,
+            "current_weather_data": response_current.json(),
             "query": query,
             "neighbour_locations": neighbour_locations,
         },
