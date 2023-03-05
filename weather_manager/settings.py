@@ -140,8 +140,8 @@ AUTH_USER_MODEL = "account.User"
 AUTHENTICATION_BACKENDS = ["account.backends.CustomUserModelBackend"]
 
 # Weather API
-WEATHER_API_KEY = "98c41912d2e5469d90c94746221111"
-DEFAULT_LOCATION = "Zielona Gora"
+WEATHER_API_KEY = "2ba22bcc0ea044c0b77174352230503"
+DEFAULT_LOCATION = "Warszawa"
 
 # Heroku
 django_on_heroku.settings(locals())
